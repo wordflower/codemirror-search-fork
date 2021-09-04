@@ -19,10 +19,6 @@ interface SearchConfig {
   /// (the default is at the bottom).
   top?: boolean
 
-  /// Whether to select the content of the search panel when activated
-  /// (the default is false)
-  select?: boolean
-
   /// Whether to match case by default when the search panel is activated
   /// (the default is true)
   matchCase?: boolean
@@ -33,7 +29,6 @@ const searchConfigFacet = Facet.define<SearchConfig, Required<SearchConfig>>({
     let matchCase = configs.some(c => c.matchCase)
     return {
       top: configs.some(c => c.top),
-      select: configs.some(c => c.select),
       matchCase: matchCase === undefined ? true : matchCase,
     }
   }
@@ -379,9 +374,7 @@ export const openSearchPanel: Command = view => {
     if (!panel) return false
     let searchInput = panel.dom.querySelector("[name=search]") as HTMLInputElement
     searchInput.focus()
-    if (view.state.facet(searchConfigFacet).select === true) {
-      searchInput.select()
-    }
+    searchInput.select()
   } else {
     view.dispatch({effects: [
       togglePanel.of(true),
